@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">InstaClone</string>
+
+    <!-- Fragment names -->
+    <string name="edit_profile_fragment">Edit Profile</string>
+    <string name="sign_out_fragment">Sign Out</string>
+
+    <!-- Fragment names -->
+    <string name="selected_image">selected_image</string>
+
+    <!-- Strings -->
+    <string name="gallery">GALLERY</string>
+    <string name="photo">PHOTO</string>
+    <string name="string_open_camera">Open Camera</string>
+    <string name="string_next">Next</string>
+    <string name="string_save">Save</string>
+    <string name="string_filtro">Filtro</string>
+    <string name="string_guardar">Guardar</string>
+
+</resources>
