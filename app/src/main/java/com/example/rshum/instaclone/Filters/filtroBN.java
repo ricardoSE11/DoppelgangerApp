@@ -1,6 +1,15 @@
+import android.graphics.Bitmap;
+import android.graphics.Color;
+
+import com.example.rshum.instaclone.Filters.ConvolutionMatrix;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class filtroBN{
+
     public Bitmap Averaging(Bitmap src){
-        Bitmap finalImage = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
+        Bitmap finalImage = src.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
         //Bitmap x =((BitmapDrawable)arepa.getDrawable()).getBitmap();
         int A,R,G,B;
         int colorPixel;
@@ -39,7 +48,7 @@ public class filtroBN{
                 G = Color.green(colorPixel);
                 B = Color.blue(colorPixel);
 
-                R=((max((max(R, B)), G)+ min((min(R, B)), G))/2;
+                R=((max((max(R, B)), G)+ min((min(R, B)), G))/2);
                 G=B=R;
                 finalImage.setPixel(i, x, Color.argb(A, R, G, B));
             }

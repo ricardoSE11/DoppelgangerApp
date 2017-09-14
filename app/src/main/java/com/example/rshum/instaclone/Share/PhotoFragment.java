@@ -58,6 +58,8 @@ public class PhotoFragment extends Fragment {
     private static final int GALLERY_FRAGMENT_NUM = 2;
     private static final int CAMERA_REQUEST_CODE = 5;
 
+    final BlackWhiteFilter blackWhiteFilter = new BlackWhiteFilter();
+
     public Spinner listaFiltros;
     public ImageView displayedPhoto;
     public Button btnLaunchCamera;
@@ -110,69 +112,67 @@ public class PhotoFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK)
-        {
+        if (resultCode == RESULT_OK) {
             if (requestCode == CAMERA_REQUEST_CODE) {
-            Log.d(TAG, "onActivityResult: donde taking a photo");
-            Log.d(TAG, "onActivityResult: attempting to navigate to share screen");
-            //navigating to the final share screen to publish photo
+                Log.d(TAG, "onActivityResult: donde taking a photo");
+                Log.d(TAG, "onActivityResult: attempting to navigate to share screen");
+                //navigating to the final share screen to publish photo
 
-            final Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
-            displayedPhoto.setImageBitmap(cameraImage);
+                final Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
+                displayedPhoto.setImageBitmap(cameraImage);
 
-            savePicture.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    saveImage(cameraImage);
-                }
-            });
-                final BlackWhiteFilter blackWhiteFilter = new BlackWhiteFilter();
-
-                listaFiltros.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                savePicture.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        switch (position)
-                        {
-                            case 1:
-                                Bitmap final_image = blackWhiteFilter.Averaging(displayedPhoto.getDrawingCache());
-                                displayedPhoto.setImageBitmap(final_image);
-                                break;
-
-                            case 2:
-                                Bitmap final_image2 = blackWhiteFilter.Desaturation(cameraImage);
-                                displayedPhoto.setImageBitmap(final_image2);
-                                break;
-
-                            case 3:
-                                Bitmap final_image3 = blackWhiteFilter.MAX(cameraImage);
-                                displayedPhoto.setImageBitmap(final_image3);
-                                break;
-
-                            case 4:
-                                Bitmap final_image4 = blackWhiteFilter.MIN(cameraImage);
-                                displayedPhoto.setImageBitmap(final_image4);
-                                break;
-
-                            case 5:
-                                Bitmap final_image5 = blackWhiteFilter.applyGaussianBlur(cameraImage);
-                                displayedPhoto.setImageBitmap(final_image5);
-                                break;
-
-                            case 6:
-                                Bitmap final_image6 = blackWhiteFilter.applyEmboss(cameraImage);
-                                displayedPhoto.setImageBitmap(final_image6);
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
+                    public void onClick(View v) {
+                        saveImage(cameraImage);
                     }
                 });
 
+            }
 
-        }
+            listaFiltros.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    switch (position)
+                    {
+                        case 1:
+                        {
+                            Bitmap final_image = blackWhiteFilter.Averaging(displayedPhoto.getDrawingCache());
+                            displayedPhoto.setImageBitmap(final_image);
+                            break;}
+
+                        case 2:
+                            Bitmap final_image2 = blackWhiteFilter.Desaturation(displayedPhoto.getDrawingCache());
+                            displayedPhoto.setImageBitmap(final_image2);
+                            break;
+
+                        case 3:
+                            Bitmap final_image3 = blackWhiteFilter.MAX(displayedPhoto.getDrawingCache());
+                            displayedPhoto.setImageBitmap(final_image3);
+                            break;
+
+                        case 4:
+                            Bitmap final_image4 = blackWhiteFilter.MIN(displayedPhoto.getDrawingCache());
+                            displayedPhoto.setImageBitmap(final_image4);
+                            break;
+
+                        case 5:
+                            Bitmap final_image5 = blackWhiteFilter.applyGaussianBlur(displayedPhoto.getDrawingCache());
+                            displayedPhoto.setImageBitmap(final_image5);
+                            break;
+
+                        case 6:
+                            Bitmap final_image6 = blackWhiteFilter.applyEmboss(displayedPhoto.getDrawingCache());
+                            displayedPhoto.setImageBitmap(final_image6);
+                            break;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
         }
 
 
