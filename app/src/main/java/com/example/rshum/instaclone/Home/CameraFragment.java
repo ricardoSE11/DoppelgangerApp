@@ -1,7 +1,9 @@
 package com.example.rshum.instaclone.Home;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +18,8 @@ import com.example.rshum.instaclone.R;
 
 public class CameraFragment extends Fragment {
     private static final String TAG = "CameraFragment";
+
+
 
     @Nullable
     @Override

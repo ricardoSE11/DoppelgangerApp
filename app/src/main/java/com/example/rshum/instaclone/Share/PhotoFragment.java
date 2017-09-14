@@ -17,10 +17,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.rshum.instaclone.Filters.BlackWhiteFilter;
 import com.example.rshum.instaclone.R;
 import com.example.rshum.instaclone.Utils.Permissions;
 
@@ -31,6 +35,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -40,11 +45,20 @@ import static android.app.Activity.RESULT_OK;
 public class PhotoFragment extends Fragment {
     private static final String TAG = "PhotoFragment";
 
+    //The first one is the one that is displayed (Title)
+    public String[] datos = {"Filtros" ,
+                    "1. Averaging" , //1
+                    "2. Desaturation" ,
+                    "3. Decomposition (Max)" ,
+                    "4. Decomposition (Min)" ,
+                    "5. GaussianBlur" ,
+                    "6. Original"};
     //constants
     private static final int PHOTO_FRAGMENT_NUM = 1;
     private static final int GALLERY_FRAGMENT_NUM = 2;
     private static final int CAMERA_REQUEST_CODE = 5;
 
+    public Spinner listaFiltros;
     public ImageView displayedPhoto;
     public Button btnLaunchCamera;
     public Button savePicture;
@@ -58,9 +72,16 @@ public class PhotoFragment extends Fragment {
 
         //ActivityCompat.requestPermissions(EditStageActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
 
+        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(getContext() , android.R.layout.simple_spinner_item , datos);
+
+        listaFiltros = (Spinner)view.findViewById(R.id.listaFiltros);
         savePicture = (Button) view.findViewById(R.id.btnSave);
         displayedPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
         btnLaunchCamera = (Button) view.findViewById(R.id.btnLaunchCamera);
+
+        listaFiltros.setAdapter(adaptador);
+
+
 
         btnLaunchCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,8 +126,56 @@ public class PhotoFragment extends Fragment {
                     saveImage(cameraImage);
                 }
             });
+                final BlackWhiteFilter blackWhiteFilter = new BlackWhiteFilter();
+
+                listaFiltros.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        switch (position)
+                        {
+                            case 1:
+                                Bitmap final_image = blackWhiteFilter.Averaging(displayedPhoto.getDrawingCache());
+                                displayedPhoto.setImageBitmap(final_image);
+                                break;
+
+                            case 2:
+                                Bitmap final_image2 = blackWhiteFilter.Desaturation(cameraImage);
+                                displayedPhoto.setImageBitmap(final_image2);
+                                break;
+
+                            case 3:
+                                Bitmap final_image3 = blackWhiteFilter.MAX(cameraImage);
+                                displayedPhoto.setImageBitmap(final_image3);
+                                break;
+
+                            case 4:
+                                Bitmap final_image4 = blackWhiteFilter.MIN(cameraImage);
+                                displayedPhoto.setImageBitmap(final_image4);
+                                break;
+
+                            case 5:
+                                Bitmap final_image5 = blackWhiteFilter.applyGaussianBlur(cameraImage);
+                                displayedPhoto.setImageBitmap(final_image5);
+                                break;
+
+                            case 6:
+                                Bitmap final_image6 = blackWhiteFilter.applyEmboss(cameraImage);
+                                displayedPhoto.setImageBitmap(final_image6);
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+
         }
         }
+
+
 
     }
 
@@ -132,33 +201,6 @@ public class PhotoFragment extends Fragment {
         return "InstaPOO" + timeStamp + ".jpg";
     }
 
-    protected void saveImg(Bitmap bitmapToChange) {
-
-        File sdCardDirectory = Environment.getExternalStorageDirectory();
-        File image = new File(sdCardDirectory, getPictureName());
-        boolean success = false;
-        FileOutputStream outStream;
-        try {
-            outStream = new FileOutputStream(image);
-            bitmapToChange.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-            outStream.flush();
-            outStream.close();
-            success = true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-        if (success) {
-            Toast.makeText(getContext(), "Image saved with success",
-                    Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(getContext(),
-                    "Error during image saving", Toast.LENGTH_LONG).show();
-
-        }
-    }
 
     public void saveImage(Bitmap bitmapToSave)
     {

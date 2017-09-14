@@ -26,7 +26,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 public class ShareActivity extends AppCompatActivity {
     private static final String TAG = "ShareActivity";
     //Constants
-    private static final int ACTIVITY_NUM = 2;
+    private static final int ACTIVITY_NUM = 1;
     private static final int VERIFY_PERMISSIONS_REQUEST = 1;
 
     private ViewPager mViewPager;

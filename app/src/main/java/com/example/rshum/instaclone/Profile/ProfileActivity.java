@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
-    private static final int ACTIVITY_NUM = 4;
+    private static final int ACTIVITY_NUM = 2;
     private static final int NUM_GRID_COLUMNS = 3;
 
     private Context mContext = ProfileActivity.this;

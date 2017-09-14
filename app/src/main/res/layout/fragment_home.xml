@@ -10,6 +10,27 @@
         android:text="Home Fragment"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:id="@+id/textView9" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:text="   Welcome to InstaPOO"
+        android:layout_below="@+id/textView9"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="22dp"
+        android:layout_below="@+id/editText2"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_hpfinal2"/>
 
 </RelativeLayout>
