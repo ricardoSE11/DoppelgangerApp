@@ -119,6 +119,7 @@ public class PhotoFragment extends Fragment {
                 //navigating to the final share screen to publish photo
 
                 final Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
+               // final Bitmap avering = blackWhiteFilter.Averaging(cameraImage);
                 displayedPhoto.setImageBitmap(cameraImage);
 
                 savePicture.setOnClickListener(new View.OnClickListener() {
@@ -128,51 +129,51 @@ public class PhotoFragment extends Fragment {
                     }
                 });
 
-            }
-
-            listaFiltros.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    switch (position)
-                    {
-                        case 1:
+                listaFiltros.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        switch (position)
                         {
-                            Bitmap final_image = blackWhiteFilter.Averaging(displayedPhoto.getDrawingCache());
-                            displayedPhoto.setImageBitmap(final_image);
-                            break;}
+                            case 1:
+                            {
+                                displayedPhoto.setImageResource(0);
+                                //displayedPhoto.setImageBitmap(avering);
+                                break;}
 
-                        case 2:
-                            Bitmap final_image2 = blackWhiteFilter.Desaturation(displayedPhoto.getDrawingCache());
-                            displayedPhoto.setImageBitmap(final_image2);
-                            break;
+                            case 2:
+                                //Bitmap final_image2 = blackWhiteFilter.Desaturation(displayedPhoto);
+                                //displayedPhoto.setImageBitmap(final_image2);
+                                break;
 
-                        case 3:
-                            Bitmap final_image3 = blackWhiteFilter.MAX(displayedPhoto.getDrawingCache());
-                            displayedPhoto.setImageBitmap(final_image3);
-                            break;
+                            case 3:
+                                Bitmap final_image3 = blackWhiteFilter.MAX(displayedPhoto.getDrawingCache());
+                                displayedPhoto.setImageBitmap(final_image3);
+                                break;
 
-                        case 4:
-                            Bitmap final_image4 = blackWhiteFilter.MIN(displayedPhoto.getDrawingCache());
-                            displayedPhoto.setImageBitmap(final_image4);
-                            break;
+                            case 4:
+                                Bitmap final_image4 = blackWhiteFilter.MIN(displayedPhoto.getDrawingCache());
+                                displayedPhoto.setImageBitmap(final_image4);
+                                break;
 
-                        case 5:
-                            Bitmap final_image5 = blackWhiteFilter.applyGaussianBlur(displayedPhoto.getDrawingCache());
-                            displayedPhoto.setImageBitmap(final_image5);
-                            break;
+                            case 5:
+                                Bitmap final_image5 = blackWhiteFilter.applyGaussianBlur(displayedPhoto.getDrawingCache());
+                                displayedPhoto.setImageBitmap(final_image5);
+                                break;
 
-                        case 6:
-                            Bitmap final_image6 = blackWhiteFilter.applyEmboss(displayedPhoto.getDrawingCache());
-                            displayedPhoto.setImageBitmap(final_image6);
-                            break;
+                            case 6:
+                                Bitmap final_image6 = blackWhiteFilter.applyEmboss(displayedPhoto.getDrawingCache());
+                                displayedPhoto.setImageBitmap(final_image6);
+                                break;
+                        }
                     }
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
 
-                }
-            });
+                    }
+                });
+
+            }
         }
 
 

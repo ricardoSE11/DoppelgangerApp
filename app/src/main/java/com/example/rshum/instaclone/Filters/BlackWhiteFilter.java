@@ -3,6 +3,7 @@ package com.example.rshum.instaclone.Filters;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.widget.ImageView;
 import android.os.Build;
 
@@ -14,10 +15,11 @@ import static java.lang.Math.min;
  */
 
 public class BlackWhiteFilter {
-
+    private static final String TAG = "BlackWhiteFilter";
 
     public Bitmap Averaging(Bitmap src){
-        Bitmap finalImage = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
+        Bitmap finalImage = Bitmap.createBitmap(src.getWidth() , src.getHeight(), src.getConfig());
+        Log.d(TAG, "Averaging: width and height HELLLOOO: " + "Width: " + src.getWidth() + ", " + "Height:" + src.getHeight() );
         //Bitmap x =((BitmapDrawable)arepa.getDrawable()).getBitmap();
         int A,R,G,B;
         int colorPixel;

@@ -90,7 +90,7 @@ public class NextActivity extends AppCompatActivity {
                         break;
 
                     case 2:
-                        blackWhiteFilter.Desaturation(usefulBit);
+                        //blackWhiteFilter.Desaturation(usefulBit);
                         break;
 
                     case 3:
