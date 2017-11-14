@@ -18,12 +18,13 @@
         android:id="@+id/editText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
+        android:layout_alignEnd="@+id/imageView"
+        android:layout_alignStart="@+id/imageView"
+        android:layout_below="@+id/textView9"
+        android:layout_marginTop="26dp"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:text="   Welcome to InstaPOO"
-        android:layout_below="@+id/textView9"
-        android:layout_centerHorizontal="true" />
+        android:text="   Welcome to Doopelganger" />
 
     <ImageView
         android:layout_width="250dp"
@@ -31,6 +32,7 @@
         android:layout_marginTop="22dp"
         android:layout_below="@+id/editText2"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_hpfinal2"/>
+        android:src="@mipmap/ic_hpfinal2"
+        android:id="@+id/imageView" />
 
 </RelativeLayout>

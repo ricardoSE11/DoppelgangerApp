@@ -7,67 +7,43 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="500dp">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
+                android:id="@+id/relLayout1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/relLayout1">
+                android:layout_height="wrap_content">
 
                 <!-- Toolbar -->
-                <include layout="@layout/snippet_top_nexttoolbar"/>
+                <include layout="@layout/snippet_top_nexttoolbar" />
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/relLayout1"
-                android:background="@drawable/grey_border_bottom"
-                android:id="@+id/relativeLayout">
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/relLayout1"
+                android:background="@drawable/grey_border_bottom">
 
                 <ImageView
-                    android:layout_width="300dp"
-                    android:layout_height="300dp"
                     android:id="@+id/imageSave"
-                    android:scaleType="centerCrop"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_alignParentTop="false"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginLeft="20dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="32dp" />
+                    android:layout_marginTop="32dp"
+                    android:scaleType="centerCrop" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="¿Desea guardar la foto o aplicar un filtro?"
-                    android:layout_below="@+id/imageSave"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="24dp"
-                    android:id="@+id/textView" />
-
-                <Spinner
-                    android:id="@+id/listaFiltros"
-                    android:layout_width="90dp"
-                    android:layout_height="40dp"
-                    android:background="@color/grey"
-                    android:layout_marginTop="13dp"
-                    android:layout_below="@+id/textView"
-                    android:layout_alignEnd="@+id/textView" />
 
             </RelativeLayout>
-
-            <Button
-                android:id="@+id/btnSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/string_guardar"
-                android:layout_marginStart="61dp"
-                android:layout_alignBottom="@+id/relativeLayout"
-                android:layout_alignParentStart="true" />
 
 
         </RelativeLayout>

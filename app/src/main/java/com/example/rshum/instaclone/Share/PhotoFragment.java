@@ -24,7 +24,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.rshum.instaclone.Filters.BlackWhiteFilter;
+
+import com.example.rshum.instaclone.Doppelganger.DoppelgangerActivity;
 import com.example.rshum.instaclone.R;
 import com.example.rshum.instaclone.Utils.Permissions;
 
@@ -45,26 +46,18 @@ import static android.app.Activity.RESULT_OK;
 public class PhotoFragment extends Fragment {
     private static final String TAG = "PhotoFragment";
 
-    //The first one is the one that is displayed (Title)
-    public String[] datos = {"Filtros" ,
-                    "1. Averaging" , //1
-                    "2. Desaturation" ,
-                    "3. Decomposition (Max)" ,
-                    "4. Decomposition (Min)" ,
-                    "5. GaussianBlur" ,
-                    "6. Original"};
     //constants
     private static final int PHOTO_FRAGMENT_NUM = 1;
     private static final int GALLERY_FRAGMENT_NUM = 2;
     private static final int CAMERA_REQUEST_CODE = 5;
 
-    final BlackWhiteFilter blackWhiteFilter = new BlackWhiteFilter();
 
-    public Spinner listaFiltros;
+    public Button btnSearch;
     public ImageView displayedPhoto;
     public Button btnLaunchCamera;
     public Button savePicture;
 
+    private String mSelectedImage;
 
     @Nullable
     @Override
@@ -74,25 +67,20 @@ public class PhotoFragment extends Fragment {
 
         //ActivityCompat.requestPermissions(EditStageActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
 
-        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(getContext() , android.R.layout.simple_spinner_item , datos);
-
-        listaFiltros = (Spinner)view.findViewById(R.id.listaFiltros);
+        btnSearch = (Button) view.findViewById(R.id.btnSearch);
         savePicture = (Button) view.findViewById(R.id.btnSave);
         displayedPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
         btnLaunchCamera = (Button) view.findViewById(R.id.btnLaunchCamera);
-
-        listaFiltros.setAdapter(adaptador);
-
 
 
         btnLaunchCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: launching camera.");
+                Log.d(TAG, "onClick: launching(inicializando) camera.");
 
                 if (((ShareActivity) getActivity()).getCurrentTabNumber() == PHOTO_FRAGMENT_NUM) {
                     if (((ShareActivity) getActivity()).checkPermissions(Permissions.CAMERA_PERMISSION[0])) {
-                        Log.d(TAG, "onClick: starting camera");
+                        Log.d(TAG, "onClick: starting(empezando) camera");
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
 
@@ -105,6 +93,8 @@ public class PhotoFragment extends Fragment {
             }
         });
 
+
+
         return view;
     }
 
@@ -114,11 +104,13 @@ public class PhotoFragment extends Fragment {
 
         if (resultCode == RESULT_OK) {
             if (requestCode == CAMERA_REQUEST_CODE) {
-                Log.d(TAG, "onActivityResult: donde taking a photo");
-                Log.d(TAG, "onActivityResult: attempting to navigate to share screen");
+                Log.d(TAG, "onActivityResult: Ya se tomo la foto");
+                Log.d(TAG, "onActivityResult: Intentando navegar en Share screen");
                 //navigating to the final share screen to publish photo
 
                 final Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
+
+                Bitmap bitmap;
                // final Bitmap avering = blackWhiteFilter.Averaging(cameraImage);
                 displayedPhoto.setImageBitmap(cameraImage);
 
@@ -129,49 +121,6 @@ public class PhotoFragment extends Fragment {
                     }
                 });
 
-                listaFiltros.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        switch (position)
-                        {
-                            case 1:
-                            {
-                                displayedPhoto.setImageResource(0);
-                                //displayedPhoto.setImageBitmap(avering);
-                                break;}
-
-                            case 2:
-                                //Bitmap final_image2 = blackWhiteFilter.Desaturation(displayedPhoto);
-                                //displayedPhoto.setImageBitmap(final_image2);
-                                break;
-
-                            case 3:
-                                Bitmap final_image3 = blackWhiteFilter.MAX(displayedPhoto.getDrawingCache());
-                                displayedPhoto.setImageBitmap(final_image3);
-                                break;
-
-                            case 4:
-                                Bitmap final_image4 = blackWhiteFilter.MIN(displayedPhoto.getDrawingCache());
-                                displayedPhoto.setImageBitmap(final_image4);
-                                break;
-
-                            case 5:
-                                Bitmap final_image5 = blackWhiteFilter.applyGaussianBlur(displayedPhoto.getDrawingCache());
-                                displayedPhoto.setImageBitmap(final_image5);
-                                break;
-
-                            case 6:
-                                Bitmap final_image6 = blackWhiteFilter.applyEmboss(displayedPhoto.getDrawingCache());
-                                displayedPhoto.setImageBitmap(final_image6);
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
 
             }
         }
@@ -228,11 +177,11 @@ public class PhotoFragment extends Fragment {
             e.printStackTrace();
         }
         if (success) {
-            Toast.makeText(getContext(), "Image saved with success",
+            Toast.makeText(getContext(), "La imagen fue guardada con éxito ",
                     Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getContext(),
-                    "Error during image saving", Toast.LENGTH_LONG).show();
+                    "No se pudo guardar la imagen", Toast.LENGTH_LONG).show();
 
         }
     }

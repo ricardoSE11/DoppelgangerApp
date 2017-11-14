@@ -73,11 +73,13 @@ public class GalleryFragment extends Fragment {
             }
         });
 
+        //Aqui esta el textView que envía la imagen seleccionada a la siguiente Activity.
         TextView nextScreen = (TextView)view.findViewById(R.id.tvNext);
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: navigating to the final share screen.");
+                Log.d(TAG, "onClick: navegando a la Share screen final.");
+
 
                 Intent intent = new Intent(getActivity() , NextActivity.class);
                 intent.putExtra(getString(R.string.selected_image), mSelectedImage);
@@ -131,7 +133,7 @@ public class GalleryFragment extends Fragment {
     }
 
     private void setupGridView(String selectedDirectory){
-        Log.d(TAG, "setupGridView: directory chosen: " + selectedDirectory);
+        Log.d(TAG, "setupGridView: directorio escogido: " + selectedDirectory);
         final ArrayList<String> imgULRs = FileSearch.getFilePaths(selectedDirectory);
 
         //set the grid column width
@@ -150,7 +152,7 @@ public class GalleryFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "onItemClick: selected an image: " + imgULRs.get(position));
+                Log.d(TAG, "onItemClick: selecciono una imagen: " + imgULRs.get(position));
 
                 setImage(imgULRs.get(position) , galleryImage , mAppend);
                 mSelectedImage = imgULRs.get(position);
@@ -159,7 +161,7 @@ public class GalleryFragment extends Fragment {
     }
 
     private void setImage(String imgULR, ImageView image , String append){
-        Log.d(TAG, "setImage: setting image");
+        Log.d(TAG, "setImage: seteando una imagen");
 
         ImageLoader imageLoader = ImageLoader.getInstance();
 
