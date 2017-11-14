@@ -1,6 +1,7 @@
 package com.example.rshum.instaclone.Share;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,17 +15,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rshum.instaclone.Profile.ProfileActivity;
 import com.example.rshum.instaclone.R;
+import com.example.rshum.instaclone.Utils.GridImageAdapter;
 import com.example.rshum.instaclone.Utils.UniversalImageLoader;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import static java.security.AccessController.getContext;
@@ -37,13 +42,19 @@ public class NextActivity extends AppCompatActivity  {
 
     private static final String TAG = "NextActivity";
 
+    private static final int NUM_GRID_COLUMNS = 3;
+
+    private Context mContext = NextActivity.this;
+
     //Variables
     private String mAppend = "file:/";
     private String imgUrl;
     private Bitmap bitmap;
-    public ImageView imageSave;
-
     private Intent intent;
+
+    //UI
+    public ImageView imageSave;
+    public GridView doppelgangers;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +76,7 @@ public class NextActivity extends AppCompatActivity  {
 
 
         setImage();
+        temporalGridSetup();
 
     }
 
@@ -123,7 +135,7 @@ public class NextActivity extends AppCompatActivity  {
             Log.d(TAG , "setImage: got new image url:" + imgUrl);
             UniversalImageLoader.setImage( imgUrl , image , null , mAppend);
         }
-        
+
         else if (intent.hasExtra(getString(R.string.selected_bitmap)))
         {
             bitmap = (Bitmap)intent.getParcelableExtra(getString(R.string.selected_bitmap));
@@ -136,6 +148,35 @@ public class NextActivity extends AppCompatActivity  {
         return bitmap;*/
     }
 
+    private void setupImageGrid(ArrayList<String> imgURLs){
+        GridView gridView = (GridView)findViewById(R.id.gridView);
+
+        int gridWith = getResources().getDisplayMetrics().widthPixels;
+        int imageWidtth = gridWith/NUM_GRID_COLUMNS;
+        gridView.setColumnWidth(imageWidtth);
+
+        GridImageAdapter adapter = new GridImageAdapter(mContext , R.layout.layout_grid_imageview , "" , imgURLs);
+        gridView.setAdapter(adapter);
+    }
+
+    private void temporalGridSetup()
+    {
+        ArrayList<String> imgURLs = new ArrayList<>();
+        imgURLs.add("https://ih0.redbubble.net/image.73789920.5043/flat,800x800,075,t.u5.jpg");
+        imgURLs.add("https://res.cloudinary.com/teepublic/image/private/s--I_t454YZ--/t_Preview/b_rgb:0195c3,c_limit,f_jpg,h_630,q_90,w_630/v1498233447/production/designs/1689060_1.jpg");
+        imgURLs.add("http://img07.deviantart.net/6122/i/2014/051/5/c/meeseeks_by_michaelogicalm-d77a0fl.png");
+        imgURLs.add("https://cdn.shopify.com/s/files/1/1103/6548/products/meeseeks-calligram-03.jpg?v=1486079062");
+
+        imgURLs.add("https://res.cloudinary.com/teepublic/image/private/s--I_t454YZ--/t_Preview/b_rgb:0195c3,c_limit,f_jpg,h_630,q_90,w_630/v1498233447/production/designs/1689060_1.jpg");
+        imgURLs.add("http://img07.deviantart.net/6122/i/2014/051/5/c/meeseeks_by_michaelogicalm-d77a0fl.png");
+        imgURLs.add("https://cdn.shopify.com/s/files/1/1103/6548/products/meeseeks-calligram-03.jpg?v=1486079062");
+        imgURLs.add("https://res.cloudinary.com/teepublic/image/private/s--I_t454YZ--/t_Preview/b_rgb:0195c3,c_limit,f_jpg,h_630,q_90,w_630/v1498233447/production/designs/1689060_1.jpg");
+        imgURLs.add("http://img07.deviantart.net/6122/i/2014/051/5/c/meeseeks_by_michaelogicalm-d77a0fl.png");
+        imgURLs.add("https://cdn.shopify.com/s/files/1/1103/6548/products/meeseeks-calligram-03.jpg?v=1486079062");
+
+        setupImageGrid(imgURLs);
+
+    }
     //Couldn´t be written, for unknown reasons.
     //private boolean isRootTask()
 
