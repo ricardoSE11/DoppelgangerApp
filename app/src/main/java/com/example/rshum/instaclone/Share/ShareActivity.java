@@ -124,4 +124,11 @@ public class ShareActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
+
+    //Not sure how this works
+    public int getTask()
+    {
+        //Log.d(TAG , "getTask: TASK: " + getIntent().getFlags());
+        return getIntent().getFlags();
+    }
 }

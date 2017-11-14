@@ -79,8 +79,6 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: navegando a la Share screen final.");
-
-
                 Intent intent = new Intent(getActivity() , NextActivity.class);
                 intent.putExtra(getString(R.string.selected_image), mSelectedImage);
                 startActivity(intent);

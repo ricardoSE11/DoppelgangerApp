@@ -39,8 +39,11 @@ public class NextActivity extends AppCompatActivity  {
 
     //Variables
     private String mAppend = "file:/";
-
+    private String imgUrl;
+    private Bitmap bitmap;
     public ImageView imageSave;
+
+    private Intent intent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +62,8 @@ public class NextActivity extends AppCompatActivity  {
                 finish();
             }
         });
+
+
         setImage();
 
     }
@@ -106,18 +111,32 @@ public class NextActivity extends AppCompatActivity  {
         }
     }
 
-
     //Gets the image url from the incoming intent and displays the chosen image
-    private Bitmap setImage(){
-        Intent intent = getIntent();
+    private void setImage(){
+        intent = getIntent();
         ImageView image = (ImageView)findViewById(R.id.imageSave);
-        //UniversalImageLoader can handle Null, but what we could have done is check if the String is null
-        UniversalImageLoader.setImage(intent.getStringExtra(getString(R.string.selected_image)) , image , null , mAppend);
-        String stringPrueba = intent.getStringExtra(getString(R.string.selected_image));
-        Bitmap bitmap = BitmapFactory.decodeFile(stringPrueba);
-        return bitmap;
+
+        //Logica utilizada para el boton de Share (Tener en cuenta)
+        if(intent.hasExtra(getString(R.string.selected_image)))
+        {
+            imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+            Log.d(TAG , "setImage: got new image url:" + imgUrl);
+            UniversalImageLoader.setImage( imgUrl , image , null , mAppend);
+        }
+        
+        else if (intent.hasExtra(getString(R.string.selected_bitmap)))
+        {
+            bitmap = (Bitmap)intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            Log.d(TAG , "setImage: got new bitmap");
+            image.setImageBitmap(bitmap);
+        }
+
+
+        /*Bitmap bitmap = BitmapFactory.decodeFile(stringPrueba);
+        return bitmap;*/
     }
 
-
+    //Couldn´t be written, for unknown reasons.
+    //private boolean isRootTask()
 
 }

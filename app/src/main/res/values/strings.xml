@@ -5,8 +5,9 @@
     <string name="edit_profile_fragment">Edit Profile</string>
     <string name="sign_out_fragment">Sign Out</string>
 
-    <!-- Fragment names -->
+    <!-- Intent extras -->
     <string name="selected_image">selected_image</string>
+    <string name="selected_bitmap">selected_bitmap</string>
 
     <!-- Strings -->
     <string name="gallery">GALLERY</string>

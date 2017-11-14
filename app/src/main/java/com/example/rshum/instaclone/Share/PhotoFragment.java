@@ -108,19 +108,35 @@ public class PhotoFragment extends Fragment {
                 Log.d(TAG, "onActivityResult: Intentando navegar en Share screen");
                 //navigating to the final share screen to publish photo
 
-                final Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
+                final Bitmap cameraImage;
+                cameraImage = (Bitmap) data.getExtras().get("data");
 
-                Bitmap bitmap;
-               // final Bitmap avering = blackWhiteFilter.Averaging(cameraImage);
                 displayedPhoto.setImageBitmap(cameraImage);
 
-                savePicture.setOnClickListener(new View.OnClickListener() {
+                /*savePicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         saveImage(cameraImage);
                     }
-                });
+                });*/
 
+
+
+                btnSearch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try
+                        {
+                            Intent intent = new Intent(getActivity() , NextActivity.class);
+                            intent.putExtra(getString(R.string.selected_bitmap) , cameraImage);
+                            startActivity(intent);
+                        }
+                        catch(NullPointerException e)
+                        {
+                            Log.d(TAG , "onActivityResult: NullPointerException: " + e.getMessage());
+                        }
+                    }
+                });
 
             }
         }
