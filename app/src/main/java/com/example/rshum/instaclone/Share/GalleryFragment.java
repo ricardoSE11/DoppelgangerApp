@@ -25,10 +25,12 @@ import com.example.rshum.instaclone.R;
 import com.example.rshum.instaclone.Utils.FilePaths;
 import com.example.rshum.instaclone.Utils.FileSearch;
 import com.example.rshum.instaclone.Utils.GridImageAdapter;
+import com.example.rshum.instaclone.Utils.HttpURLConnectionExample;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
 /**
@@ -50,6 +52,9 @@ public class GalleryFragment extends Fragment {
     private ArrayList<String> directories;
     private String mAppend = "file:/";
     private String mSelectedImage;
+
+    //pruebas
+    HttpURLConnectionExample httpPrueba = new HttpURLConnectionExample();
 
 
     @Nullable
@@ -81,6 +86,16 @@ public class GalleryFragment extends Fragment {
                 Log.d(TAG, "onClick: navegando a la Share screen final.");
                 Intent intent = new Intent(getActivity() , NextActivity.class);
                 intent.putExtra(getString(R.string.selected_image), mSelectedImage);
+
+                try
+                {
+                    httpPrueba.sendGet();
+                }
+                catch (Exception e)
+                {
+                    Log.d(TAG, "getRequest: failed" + e.getMessage());
+                }
+
                 startActivity(intent);
 
             }

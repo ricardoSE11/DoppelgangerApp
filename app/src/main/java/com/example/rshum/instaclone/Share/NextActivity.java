@@ -1,6 +1,7 @@
 package com.example.rshum.instaclone.Share;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,6 +27,8 @@ import com.example.rshum.instaclone.R;
 import com.example.rshum.instaclone.Utils.GridImageAdapter;
 import com.example.rshum.instaclone.Utils.UniversalImageLoader;
 
+import org.apache.http.params.HttpParams;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -41,7 +44,7 @@ import static java.security.AccessController.getContext;
 public class NextActivity extends AppCompatActivity  {
 
     private static final String TAG = "NextActivity";
-
+    private static final String URL = " ";
     private static final int NUM_GRID_COLUMNS = 3;
 
     private Context mContext = NextActivity.this;
@@ -52,9 +55,11 @@ public class NextActivity extends AppCompatActivity  {
     private Bitmap bitmap;
     private Intent intent;
 
+
     //UI
     public ImageView imageSave;
     public GridView doppelgangers;
+    public ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,7 +84,6 @@ public class NextActivity extends AppCompatActivity  {
         temporalGridSetup();
 
     }
-
 
     //Gives a unique name to the picture
     private String getPictureName()
@@ -180,4 +184,11 @@ public class NextActivity extends AppCompatActivity  {
     //Couldn´t be written, for unknown reasons.
     //private boolean isRootTask()
 
+    public void fetchImages()
+    {
+        Log.i(TAG , "Intentando traer imagenes del Servidor");
+        mProgressDialog = ProgressDialog.show(mContext , "Imagenes similares" , "Obteniendo imagenes del servidor, por favor espere" , true , false);
+
+
+    }
 }

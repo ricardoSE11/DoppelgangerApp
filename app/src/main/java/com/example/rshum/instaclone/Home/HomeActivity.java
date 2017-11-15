@@ -54,8 +54,8 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         //Set icons to tabs
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_ascii);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_action_name); //Instagram Logo xD
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_pattern);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_finalbinnary); //Instagram Logo xD
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_info);
 
     }

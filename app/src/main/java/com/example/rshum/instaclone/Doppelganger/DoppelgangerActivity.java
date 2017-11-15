@@ -14,6 +14,7 @@ public class DoppelgangerActivity extends AppCompatActivity {
 
     private static final String TAG = "DoppelgangerActivity";
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
