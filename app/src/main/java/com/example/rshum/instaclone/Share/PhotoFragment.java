@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +31,14 @@ import com.example.rshum.instaclone.Doppelganger.DoppelgangerActivity;
 import com.example.rshum.instaclone.R;
 import com.example.rshum.instaclone.Utils.Permissions;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -129,6 +135,8 @@ public class PhotoFragment extends Fragment {
                         {
                             Intent intent = new Intent(getActivity() , NextActivity.class);
                             intent.putExtra(getString(R.string.selected_bitmap) , cameraImage);
+                            String aBase64 = bitmapTo64Base(cameraImage);
+                            Log.d(TAG , "Intentando convertir a base64: " + aBase64);
                             startActivity(intent);
                         }
                         catch(NullPointerException e)
@@ -158,7 +166,6 @@ public class PhotoFragment extends Fragment {
         startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
     }
 
-
     //Gives a unique name to the picture
     private String getPictureName()
     {
@@ -166,7 +173,6 @@ public class PhotoFragment extends Fragment {
         String timeStamp = sdf.format(new Date());
         return "InstaPOO" + timeStamp + ".jpg";
     }
-
 
     public void saveImage(Bitmap bitmapToSave)
     {
@@ -202,6 +208,29 @@ public class PhotoFragment extends Fragment {
         }
     }
 
+    public Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String bitmapTo64Base(Bitmap bitmap)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG , 100 , baos);
+        byte[] b = baos.toByteArray();
+        String encodeImage = Base64.encodeToString(b , Base64.DEFAULT);
+        return encodeImage;
+    }
 
 
 }

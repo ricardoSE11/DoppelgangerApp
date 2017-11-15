@@ -3,12 +3,11 @@ package com.example.rshum.instaclone.Share;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +29,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -87,6 +90,19 @@ public class GalleryFragment extends Fragment {
                 Intent intent = new Intent(getActivity() , NextActivity.class);
                 intent.putExtra(getString(R.string.selected_image), mSelectedImage);
 
+                Bitmap bitmap = galleryImage.getDrawingCache();
+                //Bitmap imagensoski = getBitmapFromURL(mSelectedImage);
+                if (bitmap != null)
+                {
+                    String base64DeImagen = bitmapTo64Base(bitmap);
+                    Log.d(TAG , "Intentando pasar la imagen a base64: " + base64DeImagen);
+                }
+
+                else
+                    Log.d(TAG , "el bitmap es nulo");
+                //System.out.println(base64DeImagen);
+
+                //aqui tiene que estar el metodo de Post
                 try
                 {
                     httpPrueba.sendGet();
@@ -174,7 +190,7 @@ public class GalleryFragment extends Fragment {
     }
 
     private void setImage(String imgULR, ImageView image , String append){
-        Log.d(TAG, "setImage: seteando una imagen");
+        Log.d(TAG, "setImage: seteando una imagen" + imgULR);
 
         ImageLoader imageLoader = ImageLoader.getInstance();
 
@@ -199,6 +215,30 @@ public class GalleryFragment extends Fragment {
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+    public Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String bitmapTo64Base(Bitmap bitmap)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG , 100 , baos);
+        byte[] b = baos.toByteArray();
+        String encodeImage = Base64.encodeToString(b , Base64.DEFAULT);
+        return encodeImage;
     }
 }
 
