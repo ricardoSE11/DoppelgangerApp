@@ -135,8 +135,9 @@ public class PhotoFragment extends Fragment {
                         {
                             Intent intent = new Intent(getActivity() , NextActivity.class);
                             intent.putExtra(getString(R.string.selected_bitmap) , cameraImage);
-                            String aBase64 = bitmapTo64Base(cameraImage);
-                            Log.d(TAG , "Intentando convertir a base64: " + aBase64);
+
+                            pseudoPost(cameraImage);
+
                             startActivity(intent);
                         }
                         catch(NullPointerException e)
@@ -232,7 +233,11 @@ public class PhotoFragment extends Fragment {
         return encodeImage;
     }
 
-
+    public void pseudoPost(Bitmap cameraImage)
+    {
+        String aBase64 = bitmapTo64Base(cameraImage);
+        Log.d(TAG , "Intentando convertir a base64: " + aBase64);
+    }
 }
 //end of class
 

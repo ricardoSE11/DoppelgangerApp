@@ -25,6 +25,7 @@ import com.example.rshum.instaclone.Utils.FilePaths;
 import com.example.rshum.instaclone.Utils.FileSearch;
 import com.example.rshum.instaclone.Utils.GridImageAdapter;
 import com.example.rshum.instaclone.Utils.HttpURLConnectionExample;
+import com.example.rshum.instaclone.Utils.UniversalImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -90,17 +91,7 @@ public class GalleryFragment extends Fragment {
                 Intent intent = new Intent(getActivity() , NextActivity.class);
                 intent.putExtra(getString(R.string.selected_image), mSelectedImage);
 
-                Bitmap bitmap = galleryImage.getDrawingCache();
-                //Bitmap imagensoski = getBitmapFromURL(mSelectedImage);
-                if (bitmap != null)
-                {
-                    String base64DeImagen = bitmapTo64Base(bitmap);
-                    Log.d(TAG , "Intentando pasar la imagen a base64: " + base64DeImagen);
-                }
-
-                else
-                    Log.d(TAG , "el bitmap es nulo");
-                //System.out.println(base64DeImagen);
+                pseudoPost();
 
                 //aqui tiene que estar el metodo de Post
                 try
@@ -239,6 +230,21 @@ public class GalleryFragment extends Fragment {
         byte[] b = baos.toByteArray();
         String encodeImage = Base64.encodeToString(b , Base64.DEFAULT);
         return encodeImage;
+    }
+
+    public void pseudoPost()
+    {
+        galleryImage.buildDrawingCache();
+        Bitmap bitmap = galleryImage.getDrawingCache();
+        if (bitmap != null)
+        {
+            String base64DeImagen = bitmapTo64Base(bitmap);
+            Log.d(TAG , "Intentando pasar la imagen a base64: " + base64DeImagen);
+        }
+
+        else
+            Log.d(TAG , "el bitmap es nulo");
+
     }
 }
 
