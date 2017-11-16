@@ -77,7 +77,7 @@ public class GalleryFragment extends Fragment {
     private String mAppend = "file:/";
     private String mSelectedImage;
 
-    //pruebas
+    //Cliente de servidor
     private static AsyncHttpClient client = new AsyncHttpClient();
 
     @Nullable
@@ -128,7 +128,7 @@ public class GalleryFragment extends Fragment {
                 RequestParams params = new RequestParams();
                 params.put("StrImagen",value.toString());
                 client.addHeader("StrImagen","olasoyotro");
-                /*RequestHandle request =*/client.post(url , params , responseHandler);
+                client.post(url , params , responseHandler);
                 // --- o ---
 
                 startActivity(intent);
@@ -233,21 +233,6 @@ public class GalleryFragment extends Fragment {
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
-    }
-
-    public Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     class HttpRequestTask extends AsyncTask<Void, Void, String> {

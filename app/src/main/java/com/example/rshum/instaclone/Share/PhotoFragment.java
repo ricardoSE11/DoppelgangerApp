@@ -1,45 +1,36 @@
 package com.example.rshum.instaclone.Share;
 
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 
-import com.addicticks.net.httpsupload.HttpsFileUploader;
-import com.addicticks.net.httpsupload.HttpsFileUploaderConfig;
-import com.addicticks.net.httpsupload.HttpsFileUploaderResult;
-import com.example.rshum.instaclone.Doppelganger.DoppelgangerActivity;
 import com.example.rshum.instaclone.R;
 import com.example.rshum.instaclone.Utils.Permissions;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,6 +43,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
+import cz.msebera.android.httpclient.Header;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -67,13 +60,16 @@ public class PhotoFragment extends Fragment {
     private static final int GALLERY_FRAGMENT_NUM = 2;
     private static final int CAMERA_REQUEST_CODE = 5;
 
-
+    //UI
     public Button btnSearch;
     public ImageView displayedPhoto;
     public Button btnLaunchCamera;
     public Button savePicture;
 
     private String mSelectedImage;
+
+    //Cliente de Servidor
+    private static AsyncHttpClient client = new AsyncHttpClient();
 
     @Nullable
     @Override
@@ -144,13 +140,26 @@ public class PhotoFragment extends Fragment {
                         {
                             Intent intent = new Intent(getActivity() , NextActivity.class);
                             intent.putExtra(getString(R.string.selected_bitmap) , cameraImage);
-                            // --- Todavia no tenemos GET aqui ---
-                            //new HttpRequestTask().execute();
-                                //post(cameraImage);
-                            // --- o ---
 
-                            // --- POST: Enviamos un archivo ---
+                            // --- POST: ---
+                            String value = bitmapTo64Base(cameraImage);
+                            String url = "http://192.168.1.61:50628/api/Img";
+                            client.setConnectTimeout(40000);
+                            AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                    System.out.println("El POST fue exitoso");
+                                }
 
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                    System.out.println("HUBO UN ERROR EN LA OPERACION");
+                                }
+                            };
+                            RequestParams params = new RequestParams();
+                            params.put("StrImagen",value.toString());
+                            client.addHeader("StrImagen","olasoyotro");
+                            client.post(url , params , responseHandler);
                             // --- POST ---
                             startActivity(intent);
                         }
