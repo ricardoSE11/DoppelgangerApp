@@ -8,10 +8,8 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.rshum.instaclone.Home.HomeActivity;
-import com.example.rshum.instaclone.Likes.LikesActivity;
 import com.example.rshum.instaclone.Profile.ProfileActivity;
 import com.example.rshum.instaclone.R;
-import com.example.rshum.instaclone.Search.SearchActivity;
 import com.example.rshum.instaclone.Share.ShareActivity;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 

@@ -2,9 +2,6 @@ package com.example.rshum.instaclone.Utils;
 
 import android.os.Environment;
 
-/**
- * Created by rshum on 13/09/2017.
- */
 
 public class FilePaths {
     //"storage/emulated/0/picture"

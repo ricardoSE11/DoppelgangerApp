@@ -232,20 +232,6 @@ public class PhotoFragment extends Fragment {
         }
     }
 
-    public Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public String bitmapTo64Base(Bitmap bitmap)
     {
@@ -256,13 +242,6 @@ public class PhotoFragment extends Fragment {
         return encodeImage;
     }
 
-    public String post(Bitmap cameraImage)
-    {
-        String aBase64 = bitmapTo64Base(cameraImage);
-        System.out.println(aBase64);
-        Log.d(TAG , "Intentando convertir a base64: " + aBase64);
-        return aBase64;
-    }
 
     class HttpRequestTask extends AsyncTask<Void, Void, String> {
 

@@ -10,10 +10,6 @@ import android.view.ViewGroup;
 
 import com.example.rshum.instaclone.R;
 
-/**
- * Created by rshum on 12/09/2017.
- */
-
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
 
