@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.rshum.instaclone.R;
-import com.example.rshum.instaclone.Utils.GridBitmapAdapter;
 import com.example.rshum.instaclone.Utils.GridImageAdapter;
 import com.example.rshum.instaclone.Utils.UniversalImageLoader;
 
@@ -204,14 +203,6 @@ public class NextActivity extends AppCompatActivity  {
 
     }
 
-    //NO FUNCIONA COMO SE ESPERA
-    private void setUpBitmapGrid(ArrayList<Bitmap> bitmaps)
-    {
-        GridView gridView = (GridView)findViewById(R.id.gridView);
-        GridBitmapAdapter bitmapAdapter = new GridBitmapAdapter(mContext , bitmaps);
-        gridView.setAdapter(bitmapAdapter);
-    }
-
     private void temporalGridSetup()
     {
         ArrayList<String> imgURLs = new ArrayList<>();
@@ -228,17 +219,6 @@ public class NextActivity extends AppCompatActivity  {
         imgURLs.add("https://cdn.shopify.com/s/files/1/1103/6548/products/meeseeks-calligram-03.jpg?v=1486079062");
 
         setupImageGrid(imgURLs);
-
-    }
-
-    //Couldn´t be written, for unknown reasons.
-    //private boolean isRootTask()
-
-    public void fetchImages()
-    {
-        Log.i(TAG , "Intentando traer imagenes del Servidor");
-        mProgressDialog = ProgressDialog.show(mContext , "Imagenes similares" , "Obteniendo imagenes del servidor, por favor espere" , true , false);
-
 
     }
 
