@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -27,17 +28,26 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import com.addicticks.net.httpsupload.HttpsFileUploader;
+import com.addicticks.net.httpsupload.HttpsFileUploaderConfig;
+import com.addicticks.net.httpsupload.HttpsFileUploaderResult;
 import com.example.rshum.instaclone.Doppelganger.DoppelgangerActivity;
 import com.example.rshum.instaclone.R;
 import com.example.rshum.instaclone.Utils.Permissions;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -134,9 +144,13 @@ public class PhotoFragment extends Fragment {
                         {
                             Intent intent = new Intent(getActivity() , NextActivity.class);
                             intent.putExtra(getString(R.string.selected_bitmap) , cameraImage);
-
+                            // --- Todavia no tenemos GET aqui ---
                             pseudoPost(cameraImage);
+                            // --- o ---
 
+                            // --- POST: Enviamos un archivo ---
+
+                            // --- POST ---
                             startActivity(intent);
                         }
                         catch(NullPointerException e)
@@ -237,6 +251,92 @@ public class PhotoFragment extends Fragment {
         String aBase64 = bitmapTo64Base(cameraImage);
         System.out.println(aBase64);
         Log.d(TAG , "Intentando convertir a base64: " + aBase64);
+    }
+
+    class HttpRequestTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String urlString = "http://192.168.1.61:50628/api/Img/k";
+            URL url = null;
+
+            try
+            {
+                url = new URL(urlString);
+            }
+
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+
+            HttpURLConnection con = null;
+            try {
+                con = (HttpURLConnection) url.openConnection();
+            }
+
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                con.setRequestMethod("GET");
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            }
+
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader(
+                        new InputStreamReader(con.getInputStream()));
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            String output;
+            StringBuffer response = new StringBuffer();
+
+            try {
+                while ((output = in.readLine()) != null) {
+                    response.append(output);
+                }
+                in.close();
+                System.out.println(response.toString());
+                return response.toString();
+
+
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return response.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String greeting)
+        {
+            if (greeting != null)
+                Log.d(TAG , "intento de HttpRequestTask: " + greeting);
+
+            else
+                Log.d(TAG , "el String es nulo");
+            //Aqui recibimos las imagenes
+        }
+    }
+
+
+    //Metodos de POST
+    public File bitmapToFile(Bitmap bitmap) throws Exception
+    {
+        File file = new File("path");
+        OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+        os.close();
+        return file;
     }
 
 }

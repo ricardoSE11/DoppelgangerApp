@@ -47,4 +47,11 @@ dependencies {
     compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
 
+    //REST Library proposed by Diego Murillo
+    compile 'com.addicticks.oss:httpsupload:1.2.2'
+
+    //REST Loopj
+    compile 'com.loopj.android:android-async-http:1.4.9'
+
+
 }

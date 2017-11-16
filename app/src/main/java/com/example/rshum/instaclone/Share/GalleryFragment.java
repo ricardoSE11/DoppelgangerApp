@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.util.JsonWriter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,29 +22,45 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.addicticks.net.httpsupload.HttpsFileUploader;
+import com.addicticks.net.httpsupload.HttpsFileUploaderConfig;
+import com.addicticks.net.httpsupload.HttpsFileUploaderResult;
+import com.addicticks.net.httpsupload.UploadItem;
+import com.addicticks.net.httpsupload.UploadItemFile;
+import com.example.rshum.instaclone.Profile.SignOutFragment;
 import com.example.rshum.instaclone.R;
 import com.example.rshum.instaclone.Utils.FilePaths;
 import com.example.rshum.instaclone.Utils.FileSearch;
 import com.example.rshum.instaclone.Utils.GridImageAdapter;
 import com.example.rshum.instaclone.Utils.HttpURLConnectionExample;
-import com.example.rshum.instaclone.Utils.UniversalImageLoader;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+import org.json.JSONStringer;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by rshum on 12/09/2017.
@@ -66,7 +83,7 @@ public class GalleryFragment extends Fragment {
     private String mSelectedImage;
 
     //pruebas
-    HttpURLConnectionExample httpPrueba = new HttpURLConnectionExample();
+    private static AsyncHttpClient client = new AsyncHttpClient();
 
 
 
@@ -100,20 +117,28 @@ public class GalleryFragment extends Fragment {
                 Intent intent = new Intent(getActivity() , NextActivity.class);
                 intent.putExtra(getString(R.string.selected_image), mSelectedImage);
 
-                pseudoPost();
+                // --- GET: Recibimos una imagen en base64(String) ---
+                //new HttpRequestTask().execute();
+                // --- GET ---
 
-                // ---Parte del Servidor---
-                new HttpRequestTask().execute();
+                // --- POST ---
+                String url = "http://192.168.1.61:50628/api/Img";
+                AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        System.out.println("La operacion fue exitosa");
+                    }
 
-                try
-                {
-                    httpPrueba.sendGet();
-                }
-                catch (Exception e)
-                {
-                    Log.d(TAG, "getRequest: failed" + e.getMessage());
-                }
-                // ---Servidor---
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        System.out.println("HUBO UN ERROR EN LA OPERACION");
+                    }
+                };
+                RequestParams params = new RequestParams();
+                params.put("StrImagen","OLAKEASE");
+                client.addHeader("StrImagen","OLAKEASE");
+                client.post(url , params , responseHandler);
+                // --- o ---
 
                 startActivity(intent);
 
@@ -141,7 +166,6 @@ public class GalleryFragment extends Fragment {
             directoryNames.add(string);
 
         }
-
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item , directoryNames);
@@ -311,7 +335,7 @@ public class GalleryFragment extends Fragment {
                     response.append(output);
                 }
                 in.close();
-                System.out.println(response.toString());
+                //System.out.println(response.toString());
                 return response.toString();
 
 
@@ -335,5 +359,46 @@ public class GalleryFragment extends Fragment {
         }
     }
 
-}
+
+    //Codigo para POST
+    public void uploadFile(File file) throws Exception
+    {
+/*        HttpsFileUploaderConfig config = null;
+        config = new HttpsFileUploaderConfig(new URL("http://192.168.1.61:50628/api/Img"));
+        config.setReadTimeoutMs(20000000);
+        // Do the upload.
+        // A single file is uploaded with no progress notification
+        HttpsFileUploaderResult result = null;
+        result = HttpsFileUploader.upload(config, file);
+        // Evaluate the result.
+        if (!result.isError()) {
+            System.out.println("OK, upload successful");
+        } else {
+            System.out.println("Error uploading, http code :" + result.getHttpStatusCode());
+            System.out.println("Message from server : " + result.getResponseTextNoHtml());
+        }*/
+        HttpsFileUploaderConfig config = new HttpsFileUploaderConfig(new URL("http://192.168.1.61:50628/api/Img"));
+        Map<String,String> extraFields = new HashMap<>();
+        extraFields.put("quantity","9");
+        config.setAdditionalHeaders(extraFields);
+        config.setReadTimeoutMs(20000000);
+        HttpsFileUploaderResult result = HttpsFileUploader.upload(
+                config,
+                Collections.singletonList(new UploadItemFile(file)),
+                extraFields,
+                null
+        );
+    }
+
+    public File bitmapToFile(Bitmap bitmap) throws Exception
+    {
+        File file = new File("path");
+        OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+        os.close();
+        return file;
+    }
+
+
+    }
 

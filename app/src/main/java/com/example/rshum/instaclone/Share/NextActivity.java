@@ -1,41 +1,31 @@
 package com.example.rshum.instaclone.Share;
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rshum.instaclone.Profile.ProfileActivity;
 import com.example.rshum.instaclone.R;
+import com.example.rshum.instaclone.Utils.GridBitmapAdapter;
 import com.example.rshum.instaclone.Utils.GridImageAdapter;
 import com.example.rshum.instaclone.Utils.UniversalImageLoader;
-
-import org.apache.http.params.HttpParams;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import static java.security.AccessController.getContext;
 
 
 public class NextActivity extends AppCompatActivity  {
@@ -51,12 +41,15 @@ public class NextActivity extends AppCompatActivity  {
     private String imgUrl;
     private Bitmap bitmap;
     private Intent intent;
-
+    private ArrayList<Bitmap> imagesBitmaps;
 
     //UI
     public ImageView imageSave;
     public GridView doppelgangers;
     public ProgressDialog mProgressDialog;
+
+    //Prueba
+    //String prueba;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +71,7 @@ public class NextActivity extends AppCompatActivity  {
 
 
         setImage();
+        //setUpBitmapGrid(imagesBitmaps);
         temporalGridSetup();
 
     }
@@ -158,6 +152,15 @@ public class NextActivity extends AppCompatActivity  {
 
         GridImageAdapter adapter = new GridImageAdapter(mContext , R.layout.layout_grid_imageview , "" , imgURLs);
         gridView.setAdapter(adapter);
+
+    }
+
+    //NO FUNCIONA COMO SE ESPERA
+    private void setUpBitmapGrid(ArrayList<Bitmap> bitmaps)
+    {
+        GridView gridView = (GridView)findViewById(R.id.gridView);
+        GridBitmapAdapter bitmapAdapter = new GridBitmapAdapter(mContext , bitmaps);
+        gridView.setAdapter(bitmapAdapter);
     }
 
     private void temporalGridSetup()
@@ -189,4 +192,20 @@ public class NextActivity extends AppCompatActivity  {
 
 
     }
-}
+
+    public Bitmap getBase64Bitmap(String base64DeImagen) {
+        if(base64DeImagen!=null)
+        {
+            byte[] image_data = Base64.decode(base64DeImagen, Base64.NO_WRAP);
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.outHeight = 32; //32 pixles
+            options.outWidth = 32; //32 pixles
+            options.outMimeType = "png"; //this could be image/jpeg, image/png, etc
+
+            return BitmapFactory.decodeByteArray(image_data, 0, image_data.length, options);
+        }
+        return null;
+    }
+
+}//fin de clase

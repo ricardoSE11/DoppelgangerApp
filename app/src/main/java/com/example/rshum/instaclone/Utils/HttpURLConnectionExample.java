@@ -61,7 +61,7 @@ public class HttpURLConnectionExample {
 
         String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
 
-        // Send post request
+        // Send uploadFile request
         con.setDoOutput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
         wr.writeBytes(urlParameters);
