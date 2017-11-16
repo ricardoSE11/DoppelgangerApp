@@ -110,7 +110,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
     }
-
     // We create this method so we can use it on other Activities
     private void setupBottomNavigationView(){
         Log.d(TAG , "setupBottomNavigationView: setting up BottomNavigationView");

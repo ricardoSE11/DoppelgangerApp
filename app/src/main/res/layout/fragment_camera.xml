@@ -7,10 +7,25 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="More information(?)"
+        android:text="Local Binnary Pattern"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:textSize="20sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:text="Local binary patterns (LBP) is a type of visual
+descriptor used for classification in computer vision. LBP is the particular case of the Texture Spectrum model proposed in 1990.
+
+    LBP was first described in 1994.It has since been found to be a powerful feature for texture classification; it has further been determined that when LBP is combined with the Histogram of oriented gradients (HOG) descriptor, it improves the detection performance considerably on some datasets
+
+"
         android:textColor="@color/black"/>
 
 </RelativeLayout>
