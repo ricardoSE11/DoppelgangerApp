@@ -55,7 +55,7 @@
                 <GridView
                     android:id="@+id/gridView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="250dp"
                     android:gravity="center"
                     android:horizontalSpacing="1dp"
                     android:numColumns="3"

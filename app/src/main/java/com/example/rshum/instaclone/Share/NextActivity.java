@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -21,8 +22,15 @@ import com.example.rshum.instaclone.Utils.GridBitmapAdapter;
 import com.example.rshum.instaclone.Utils.GridImageAdapter;
 import com.example.rshum.instaclone.Utils.UniversalImageLoader;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,6 +66,9 @@ public class NextActivity extends AppCompatActivity  {
 
         //Is very important to verify Views names
         imageSave = (ImageView)findViewById(R.id.imageSave);
+
+        new HttpRequestTask().execute();
+        System.out.println("Recibimos la imagen");
 
 
         ImageView backArrow = (ImageView)findViewById(R.id.backArrow);
@@ -206,6 +217,86 @@ public class NextActivity extends AppCompatActivity  {
             return BitmapFactory.decodeByteArray(image_data, 0, image_data.length, options);
         }
         return null;
+    }
+
+    class HttpRequestTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String urlString = "http://192.168.1.61:50628/api/Img/0";
+            java.net.URL url = null;
+
+            try
+            {
+                url = new URL(urlString);
+            }
+
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+
+            HttpURLConnection con = null;
+            try {
+                con = (HttpURLConnection) url.openConnection();
+            }
+
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                con.setRequestMethod("GET");
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            }
+
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader(
+                        new InputStreamReader(con.getInputStream()));
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            String output;
+            StringBuffer response = new StringBuffer();
+
+            try {
+                while ((output = in.readLine()) != null) {
+                    response.append(output);
+                }
+                in.close();
+                //System.out.println(response.toString());
+                return response.toString();
+
+
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return response.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String requestAnswer)
+        {
+            if (requestAnswer != null)
+            {
+                Log.d(TAG , "Respuesta de HttpRequestTask: " + requestAnswer);
+                Bitmap imgReceived = getBase64Bitmap(requestAnswer);
+                imageSave.setImageBitmap(imgReceived);
+
+            }
+
+            else
+                Log.d(TAG , "el String es nulo");
+            //Aqui recibimos las imagenes
+        }
     }
 
 }//fin de clase

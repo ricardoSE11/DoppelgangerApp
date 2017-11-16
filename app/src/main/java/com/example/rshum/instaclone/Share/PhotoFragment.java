@@ -145,7 +145,8 @@ public class PhotoFragment extends Fragment {
                             Intent intent = new Intent(getActivity() , NextActivity.class);
                             intent.putExtra(getString(R.string.selected_bitmap) , cameraImage);
                             // --- Todavia no tenemos GET aqui ---
-                            pseudoPost(cameraImage);
+                            new HttpRequestTask().execute();
+                                //post(cameraImage);
                             // --- o ---
 
                             // --- POST: Enviamos un archivo ---
@@ -246,18 +247,19 @@ public class PhotoFragment extends Fragment {
         return encodeImage;
     }
 
-    public void pseudoPost(Bitmap cameraImage)
+    public String post(Bitmap cameraImage)
     {
         String aBase64 = bitmapTo64Base(cameraImage);
         System.out.println(aBase64);
         Log.d(TAG , "Intentando convertir a base64: " + aBase64);
+        return aBase64;
     }
 
     class HttpRequestTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
-            String urlString = "http://192.168.1.61:50628/api/Img/k";
+            String urlString = "http://192.168.1.61:50628/api/Img/0";
             URL url = null;
 
             try
@@ -327,7 +329,6 @@ public class PhotoFragment extends Fragment {
             //Aqui recibimos las imagenes
         }
     }
-
 
     //Metodos de POST
     public File bitmapToFile(Bitmap bitmap) throws Exception

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
-import android.util.JsonWriter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,22 +24,18 @@ import android.widget.TextView;
 import com.addicticks.net.httpsupload.HttpsFileUploader;
 import com.addicticks.net.httpsupload.HttpsFileUploaderConfig;
 import com.addicticks.net.httpsupload.HttpsFileUploaderResult;
-import com.addicticks.net.httpsupload.UploadItem;
 import com.addicticks.net.httpsupload.UploadItemFile;
-import com.example.rshum.instaclone.Profile.SignOutFragment;
 import com.example.rshum.instaclone.R;
 import com.example.rshum.instaclone.Utils.FilePaths;
 import com.example.rshum.instaclone.Utils.FileSearch;
 import com.example.rshum.instaclone.Utils.GridImageAdapter;
-import com.example.rshum.instaclone.Utils.HttpURLConnectionExample;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
-import org.json.JSONStringer;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -84,6 +79,7 @@ public class GalleryFragment extends Fragment {
 
     //pruebas
     private static AsyncHttpClient client = new AsyncHttpClient();
+    public static final int DEFAULT_SOCKET_TIMEOUT = 20000;
 
 
 
@@ -117,16 +113,13 @@ public class GalleryFragment extends Fragment {
                 Intent intent = new Intent(getActivity() , NextActivity.class);
                 intent.putExtra(getString(R.string.selected_image), mSelectedImage);
 
-                // --- GET: Recibimos una imagen en base64(String) ---
-                //new HttpRequestTask().execute();
-                // --- GET ---
-
                 // --- POST ---
+                String value = post();
                 String url = "http://192.168.1.61:50628/api/Img";
                 AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        System.out.println("La operacion fue exitosa");
+                        System.out.println("El POST fue exitoso");
                     }
 
                     @Override
@@ -135,10 +128,18 @@ public class GalleryFragment extends Fragment {
                     }
                 };
                 RequestParams params = new RequestParams();
-                params.put("StrImagen","OLAKEASE");
-                client.addHeader("StrImagen","OLAKEASE");
-                client.post(url , params , responseHandler);
+                params.put("StrImagen",value.toString());
+                client.addHeader("StrImagen","olasoyotro");
+                client.setConnectTimeout(40000);
+                RequestHandle request = client.post(url , params , responseHandler);
                 // --- o ---
+
+                // --- GET: Recibimos una imagen en base64(String) ---
+                /*if (request.isFinished())
+                {
+                    new HttpRequestTask().execute();
+                }*/
+                // --- GET ---
 
                 startActivity(intent);
 
@@ -262,33 +263,35 @@ public class GalleryFragment extends Fragment {
     public String bitmapTo64Base(Bitmap bitmap)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG , 100 , baos);
+        bitmap.compress(Bitmap.CompressFormat.PNG , 100 , baos);
         byte[] b = baos.toByteArray();
         String encodeImage = Base64.encodeToString(b , Base64.DEFAULT);
         return encodeImage;
     }
 
-    public void pseudoPost()
+    public String post()
     {
         galleryImage.buildDrawingCache();
         Bitmap bitmap = galleryImage.getDrawingCache();
         if (bitmap != null)
         {
             String base64DeImagen = bitmapTo64Base(bitmap);
-            System.out.println(base64DeImagen);
-            Log.d(TAG , "Intentando pasar la imagen a base64: " + base64DeImagen);
+            //System.out.println(base64DeImagen);
+            Log.d(TAG , "Intentando pasar la imagen a base64: " + base64DeImagen.replaceAll("\\s+",""));
+            return base64DeImagen;
+
         }
 
         else
             Log.d(TAG , "el bitmap es nulo");
-
+            return  null;
     }
 
     class HttpRequestTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
-            String urlString = "http://192.168.1.61:50628/api/Img/k";
+            String urlString = "http://192.168.1.61:50628/api/Img/0";
             URL url = null;
 
             try
@@ -351,14 +354,13 @@ public class GalleryFragment extends Fragment {
         protected void onPostExecute(String greeting)
         {
             if (greeting != null)
-                Log.d(TAG , "intento de HttpRequestTask: " + greeting);
+                Log.d(TAG , "Respuesta de HttpRequestTask: " + greeting);
 
             else
                 Log.d(TAG , "el String es nulo");
             //Aqui recibimos las imagenes
         }
     }
-
 
     //Codigo para POST
     public void uploadFile(File file) throws Exception
