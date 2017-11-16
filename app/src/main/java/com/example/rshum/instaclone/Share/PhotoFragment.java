@@ -145,7 +145,7 @@ public class PhotoFragment extends Fragment {
                             Intent intent = new Intent(getActivity() , NextActivity.class);
                             intent.putExtra(getString(R.string.selected_bitmap) , cameraImage);
                             // --- Todavia no tenemos GET aqui ---
-                            new HttpRequestTask().execute();
+                            //new HttpRequestTask().execute();
                                 //post(cameraImage);
                             // --- o ---
 

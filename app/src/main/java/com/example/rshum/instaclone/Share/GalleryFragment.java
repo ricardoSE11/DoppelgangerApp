@@ -79,9 +79,6 @@ public class GalleryFragment extends Fragment {
 
     //pruebas
     private static AsyncHttpClient client = new AsyncHttpClient();
-    public static final int DEFAULT_SOCKET_TIMEOUT = 20000;
-
-
 
     @Nullable
     @Override
@@ -116,6 +113,7 @@ public class GalleryFragment extends Fragment {
                 // --- POST ---
                 String value = post();
                 String url = "http://192.168.1.61:50628/api/Img";
+                client.setConnectTimeout(40000);
                 AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -130,16 +128,8 @@ public class GalleryFragment extends Fragment {
                 RequestParams params = new RequestParams();
                 params.put("StrImagen",value.toString());
                 client.addHeader("StrImagen","olasoyotro");
-                client.setConnectTimeout(40000);
-                RequestHandle request = client.post(url , params , responseHandler);
+                /*RequestHandle request =*/client.post(url , params , responseHandler);
                 // --- o ---
-
-                // --- GET: Recibimos una imagen en base64(String) ---
-                /*if (request.isFinished())
-                {
-                    new HttpRequestTask().execute();
-                }*/
-                // --- GET ---
 
                 startActivity(intent);
 
@@ -260,33 +250,6 @@ public class GalleryFragment extends Fragment {
         }
     }
 
-    public String bitmapTo64Base(Bitmap bitmap)
-    {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG , 100 , baos);
-        byte[] b = baos.toByteArray();
-        String encodeImage = Base64.encodeToString(b , Base64.DEFAULT);
-        return encodeImage;
-    }
-
-    public String post()
-    {
-        galleryImage.buildDrawingCache();
-        Bitmap bitmap = galleryImage.getDrawingCache();
-        if (bitmap != null)
-        {
-            String base64DeImagen = bitmapTo64Base(bitmap);
-            //System.out.println(base64DeImagen);
-            Log.d(TAG , "Intentando pasar la imagen a base64: " + base64DeImagen.replaceAll("\\s+",""));
-            return base64DeImagen;
-
-        }
-
-        else
-            Log.d(TAG , "el bitmap es nulo");
-            return  null;
-    }
-
     class HttpRequestTask extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -363,44 +326,33 @@ public class GalleryFragment extends Fragment {
     }
 
     //Codigo para POST
-    public void uploadFile(File file) throws Exception
+
+    public String bitmapTo64Base(Bitmap bitmap)
     {
-/*        HttpsFileUploaderConfig config = null;
-        config = new HttpsFileUploaderConfig(new URL("http://192.168.1.61:50628/api/Img"));
-        config.setReadTimeoutMs(20000000);
-        // Do the upload.
-        // A single file is uploaded with no progress notification
-        HttpsFileUploaderResult result = null;
-        result = HttpsFileUploader.upload(config, file);
-        // Evaluate the result.
-        if (!result.isError()) {
-            System.out.println("OK, upload successful");
-        } else {
-            System.out.println("Error uploading, http code :" + result.getHttpStatusCode());
-            System.out.println("Message from server : " + result.getResponseTextNoHtml());
-        }*/
-        HttpsFileUploaderConfig config = new HttpsFileUploaderConfig(new URL("http://192.168.1.61:50628/api/Img"));
-        Map<String,String> extraFields = new HashMap<>();
-        extraFields.put("quantity","9");
-        config.setAdditionalHeaders(extraFields);
-        config.setReadTimeoutMs(20000000);
-        HttpsFileUploaderResult result = HttpsFileUploader.upload(
-                config,
-                Collections.singletonList(new UploadItemFile(file)),
-                extraFields,
-                null
-        );
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG , 100 , baos);
+        byte[] b = baos.toByteArray();
+        String encodeImage = Base64.encodeToString(b , Base64.DEFAULT);
+        return encodeImage;
     }
 
-    public File bitmapToFile(Bitmap bitmap) throws Exception
+    public String post()
     {
-        File file = new File("path");
-        OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-        os.close();
-        return file;
-    }
+        galleryImage.buildDrawingCache();
+        Bitmap bitmap = galleryImage.getDrawingCache();
+        if (bitmap != null)
+        {
+            String base64DeImagen = bitmapTo64Base(bitmap);
+            //System.out.println(base64DeImagen);
+            Log.d(TAG , "Intentando pasar la imagen a base64: " + base64DeImagen.replaceAll("\\s+",""));
+            return base64DeImagen;
 
+        }
+
+        else
+            Log.d(TAG , "el bitmap es nulo");
+        return  null;
+    }
 
     }
 

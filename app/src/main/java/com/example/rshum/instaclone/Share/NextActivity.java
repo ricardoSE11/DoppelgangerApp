@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -50,11 +51,26 @@ public class NextActivity extends AppCompatActivity  {
     private Bitmap bitmap;
     private Intent intent;
     private ArrayList<Bitmap> imagesBitmaps;
+    private int contador=0;
+    private int cont=0;
 
     //UI
     public ImageView imageSave;
+    public ImageView img1;
+    public ImageView img2;
+    public ImageView img3;
+    public ImageView img4;
+    public ImageView img5;
+    public ImageView img6;
+    public ImageView img7;
+    public ImageView img8;
+    public ImageView img9;
+    public ImageView img10;
     public GridView doppelgangers;
     public ProgressDialog mProgressDialog;
+    public Button buttonGet;
+    public Button buttonCargar;
+    Bitmap imgReceived;
 
     //Prueba
     //String prueba;
@@ -66,10 +82,18 @@ public class NextActivity extends AppCompatActivity  {
 
         //Is very important to verify Views names
         imageSave = (ImageView)findViewById(R.id.imageSave);
-
-        new HttpRequestTask().execute();
-        System.out.println("Recibimos la imagen");
-
+        img1 = (ImageView)findViewById(R.id.img1);
+        img2 = (ImageView)findViewById(R.id.img2);
+        img3 = (ImageView)findViewById(R.id.img3);
+        img4 = (ImageView)findViewById(R.id.img4);
+        img5 = (ImageView)findViewById(R.id.img5);
+        img6 = (ImageView)findViewById(R.id.img6);
+        img7 = (ImageView)findViewById(R.id.img7);
+        img8 = (ImageView)findViewById(R.id.img8);
+        img9 = (ImageView)findViewById(R.id.img9);
+        img10 = (ImageView)findViewById(R.id.img10);
+        buttonGet = (Button)findViewById(R.id.buttonGet);
+        buttonCargar = (Button)findViewById(R.id.buttonCargar);
 
         ImageView backArrow = (ImageView)findViewById(R.id.backArrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -80,10 +104,24 @@ public class NextActivity extends AppCompatActivity  {
             }
         });
 
-
         setImage();
+
+        buttonGet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new HttpRequestTask().execute();
+                System.out.println("Recibimos la imagen");
+            }
+        });
+
+        buttonCargar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mostrar(imgReceived);
+            }
+        });
         //setUpBitmapGrid(imagesBitmaps);
-        temporalGridSetup();
+        //temporalGridSetup();
 
     }
 
@@ -219,11 +257,61 @@ public class NextActivity extends AppCompatActivity  {
         return null;
     }
 
+    public void mostrar(Bitmap img){
+        String nom="img"+Integer.toString(cont);
+        if(cont==0){
+            img1.setImageBitmap(img);
+            contador++;
+        }
+        if(cont==1){
+            img2.setImageBitmap(img);
+            contador++;
+        }
+        if(cont==2){
+            img3.setImageBitmap(img);
+            contador++;
+        }
+        if(cont==3){
+            img4.setImageBitmap(img);
+            contador++;
+        }
+        if(cont==4){
+            img5.setImageBitmap(img);
+            contador++;
+        }
+        if(cont==5){
+            img6.setImageBitmap(img);
+            contador++;
+        }
+        if(cont==6){
+            img7.setImageBitmap(img);
+            contador++;
+        }
+        if(cont==7){
+            img8.setImageBitmap(img);
+            contador++;
+        }
+        if(cont==8){
+            img9.setImageBitmap(img);
+            contador++;
+        }
+        if(cont==9){
+            img10.setImageBitmap(img);
+            cont = 0;
+            contador = 0;
+        }
+
+        cont++;
+    }
+
     class HttpRequestTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
-            String urlString = "http://192.168.1.61:50628/api/Img/0";
+
+            Integer.toString(contador);
+            String urlString = "http://192.168.1.61:50628/api/Img/";
+            urlString += contador;
             java.net.URL url = null;
 
             try
@@ -288,8 +376,18 @@ public class NextActivity extends AppCompatActivity  {
             if (requestAnswer != null)
             {
                 Log.d(TAG , "Respuesta de HttpRequestTask: " + requestAnswer);
-                Bitmap imgReceived = getBase64Bitmap(requestAnswer);
-                imageSave.setImageBitmap(imgReceived);
+                imgReceived = getBase64Bitmap(requestAnswer);
+
+//                img1.setImageBitmap(imgReceived);
+//                img2.setImageBitmap(imgReceived);
+//                img3.setImageBitmap(imgReceived);
+//                img4.setImageBitmap(imgReceived);
+//                img5.setImageBitmap(imgReceived);
+//                img6.setImageBitmap(imgReceived);
+//                img7.setImageBitmap(imgReceived);
+//                img8.setImageBitmap(imgReceived);
+//                img9.setImageBitmap(imgReceived);
+//                img10.setImageBitmap(imgReceived);
 
             }
 
