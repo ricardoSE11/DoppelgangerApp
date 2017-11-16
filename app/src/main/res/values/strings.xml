@@ -18,4 +18,12 @@
     <string name="string_filtro">Filtro</string>
     <string name="string_guardar">Guardar</string>
 
+    <!-- REST Tutorial -->
+    <!-- El app_name esta arriba -->
+    <string name="id_label">The ID is</string>
+    <string name="id_value">[id]</string>
+    <string name="content_label">The Content is</string>
+    <string name="content_value">[content]</string>
+    <string name="action_refresh">Refresh</string>
+
 </resources>

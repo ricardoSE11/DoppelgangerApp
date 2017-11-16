@@ -12,22 +12,12 @@ public class HttpURLConnectionExample {
 
     private final String USER_AGENT = "Mozilla/5.0";
 
-    public static void main(String[] args) throws Exception {
 
-        HttpURLConnectionExample http = new HttpURLConnectionExample();
-
-        System.out.println("Testing 1 - Send Http GET request");
-        http.sendGet();
-
-        System.out.println("\nTesting 2 - Send Http POST request");
-        http.sendPost();
-
-    }
 
     // HTTP GET request
     public void sendGet() throws Exception {
 
-        String url = "http://192.168.1.61:50628/api/Img/6";
+        String url = "http://192.168.1.61:50628/api/Img/k";
 
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -60,7 +50,7 @@ public class HttpURLConnectionExample {
     // HTTP POST request
     public void sendPost() throws Exception {
 
-        String url = "http://192.168.1.61:50628/api/Img/6";
+        String url = "http://192.168.1.61:50628/api/Img/k";
         URL obj = new URL(url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 

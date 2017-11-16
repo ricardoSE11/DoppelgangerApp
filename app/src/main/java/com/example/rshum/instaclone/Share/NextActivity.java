@@ -37,9 +37,6 @@ import java.util.Date;
 
 import static java.security.AccessController.getContext;
 
-/**
- * Created by rshum on 13/09/2017.
- */
 
 public class NextActivity extends AppCompatActivity  {
 
@@ -181,6 +178,7 @@ public class NextActivity extends AppCompatActivity  {
         setupImageGrid(imgURLs);
 
     }
+
     //Couldn´t be written, for unknown reasons.
     //private boolean isRootTask()
 

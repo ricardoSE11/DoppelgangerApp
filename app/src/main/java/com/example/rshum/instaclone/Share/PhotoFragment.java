@@ -127,7 +127,6 @@ public class PhotoFragment extends Fragment {
                 });*/
 
 
-
                 btnSearch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -236,8 +235,10 @@ public class PhotoFragment extends Fragment {
     public void pseudoPost(Bitmap cameraImage)
     {
         String aBase64 = bitmapTo64Base(cameraImage);
+        System.out.println(aBase64);
         Log.d(TAG , "Intentando convertir a base64: " + aBase64);
     }
+
 }
 //end of class
 

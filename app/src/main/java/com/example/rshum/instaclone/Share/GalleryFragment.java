@@ -4,6 +4,7 @@ package com.example.rshum.instaclone.Share;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -30,10 +31,17 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -59,6 +67,7 @@ public class GalleryFragment extends Fragment {
 
     //pruebas
     HttpURLConnectionExample httpPrueba = new HttpURLConnectionExample();
+
 
 
     @Nullable
@@ -93,7 +102,9 @@ public class GalleryFragment extends Fragment {
 
                 pseudoPost();
 
-                //aqui tiene que estar el metodo de Post
+                // ---Parte del Servidor---
+                new HttpRequestTask().execute();
+
                 try
                 {
                     httpPrueba.sendGet();
@@ -102,6 +113,7 @@ public class GalleryFragment extends Fragment {
                 {
                     Log.d(TAG, "getRequest: failed" + e.getMessage());
                 }
+                // ---Servidor---
 
                 startActivity(intent);
 
@@ -239,6 +251,7 @@ public class GalleryFragment extends Fragment {
         if (bitmap != null)
         {
             String base64DeImagen = bitmapTo64Base(bitmap);
+            System.out.println(base64DeImagen);
             Log.d(TAG , "Intentando pasar la imagen a base64: " + base64DeImagen);
         }
 
@@ -246,5 +259,81 @@ public class GalleryFragment extends Fragment {
             Log.d(TAG , "el bitmap es nulo");
 
     }
+
+    class HttpRequestTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String urlString = "http://192.168.1.61:50628/api/Img/k";
+            URL url = null;
+
+            try
+            {
+                url = new URL(urlString);
+            }
+
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+            }
+
+            HttpURLConnection con = null;
+            try {
+                con = (HttpURLConnection) url.openConnection();
+            }
+
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                con.setRequestMethod("GET");
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            }
+
+            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader(
+                        new InputStreamReader(con.getInputStream()));
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            String output;
+            StringBuffer response = new StringBuffer();
+
+            try {
+                while ((output = in.readLine()) != null) {
+                    response.append(output);
+                }
+                in.close();
+                System.out.println(response.toString());
+                return response.toString();
+
+
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return response.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String greeting)
+        {
+            if (greeting != null)
+                Log.d(TAG , "intento de HttpRequestTask: " + greeting);
+
+            else
+                Log.d(TAG , "el String es nulo");
+            //Aqui recibimos las imagenes
+        }
+    }
+
 }
 
